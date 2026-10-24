@@ -117,5 +117,153 @@
 <script>
 
 </script>
+	
+student_records = [
+    [
+        {"name": "Raven", "grade": 85},
+        {"name": "Israel", "grade": 90}
+    ],
+    [
+        {"name": "Abel", "grade": 78},
+        {"name": "Justine", "grade": 88},
+        {"name": "James", "grade": 92}
+    ]
+]
+            
+def count_students(records):
+    if not records:
+        return 0
 
+    if isinstance(records[0], list):
+        return count_students(records[0]) + count_students(records[1:])
+    else:
+        return 1 + count_students(records[1:])
+
+
+def calculate_total(records):
+    if not records:
+        return 0
+    if isinstance(records[0], list):
+        return calculate_total(records[0]) + calculate_total(records[1:])
+    else:
+        return records[0]["grade"] + calculate_total(records[1:])
+
+def calculate_average(records):
+    total = calculate_total(records)
+    count = count_students(records)
+    if count == 0:
+        return 0.0
+    return round(total / count, 2)
+
+
+def find_highest(records):
+    if not records:
+        return float('-inf')
+    
+    if isinstance(records[0], list):
+        sub_highest = find_highest(records[0])
+        rest_highest = find_highest(records[1:])
+        return sub_highest if sub_highest > rest_highest else rest_highest
+    else:
+        current_grade = records[0]["grade"]
+        rest_highest = find_highest(records[1:])
+        return current_grade if current_grade > rest_highest else rest_highest
+
+
+def search_student(records, name):
+    if not records:
+        return None
+    
+    if isinstance(records[0], list):
+        result = search_student(records[0], name)
+        if result:
+            return result
+        return search_student(records[1:], name)
+    else:
+        if records[0]["name"].lower() == name.lower():
+            return records[0]
+        return search_student(records[1:], name)
+
+
+
+def display_records(records):
+    if not records:
+        return
+    
+    if isinstance(records[0], list):
+        display_records(records[0])
+    else:
+        print(f"Name: {records[0]['name']} | Grade: {records[0]['grade']}")
+    
+    display_records(records[1:])
+
+
+
+def count_passed(records):
+    if not records:
+        return 0
+    if isinstance(records[0], list):
+        return count_passed(records[0]) + count_passed(records[1:])
+    else:
+        passing = 1 if records[0]["grade"] >= 75 else 0
+        return passing + count_passed(records[1:])
+
+def count_failed(records):
+    if not records:
+        return 0
+    if isinstance(records[0], list):
+        return count_failed(records[0]) + count_failed(records[1:])
+    else:
+        failing = 1 if records[0]["grade"] < 75 else 0
+        return failing + count_failed(records[1:])
+
+
+
+def main():
+    while True:
+        print("\n==================================")
+        print("RECURSIVE STUDENT RECORD SYSTEM")
+        print("==================================")
+        print("1. Display Student Records")
+        print("2. Count Students")
+        print("3. Calculate Total Grades")
+        print("4. Calculate Average Grade")
+        print("5. Find Highest Grade")
+        print("6. Search Student")
+        print("7. Count Passed / Failed Students")
+        print("8. Exit")
+        
+        choice = input("Enter your choice (1-8): ")
+        
+        if choice == '1':
+            print("\n--- Student Records ---")
+            display_records(student_records)
+        elif choice == '2':
+            print(f"\nTotal Students: {count_students(student_records)}")
+        elif choice == '3':
+            print(f"\nTotal Grades: {calculate_total(student_records)}")
+        elif choice == '4':
+            print(f"\nAverage Grade: {calculate_average(student_records)}")
+        elif choice == '5':
+            print(f"\nHighest Grade: {find_highest(student_records)}")
+        elif choice == '6':
+            name_to_search = input("\nEnter student name to search: ")
+            res = search_student(student_records, name_to_search)
+            if res:
+                print("Student Found!")
+                print(f"Name: {res['name']}")
+                print(f"Grade: {res['grade']}")
+            else:
+                print("Student Not Found.")
+        elif choice == '7':
+            print(f"\nNumber of Students Passed: {count_passed(student_records)}")
+            print(f"Number of Students Failed: {count_failed(student_records)}")
+        elif choice == '8':
+            print("\nExiting program. Goodbye!")
+            break
+        else:
+            print("\nInvalid choice. Please enter a number between 1 and 8.")
+main()            
+
+		
 </body><span class="gr__tooltip"><span class="gr__tooltip-content"></span><i class="gr__tooltip-logo"></i><span class="gr__triangle"></span></span></html>
