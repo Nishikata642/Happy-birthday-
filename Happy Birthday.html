@@ -1,245 +1,161 @@
-
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FoodSaver System</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="test.css">
+    <script src="jj.js"</script>
 </head>
 <body>
 
 <div class="sidebar">
-    <h2><i class="fa-solid fa-leaf"></i> FoodSaver</h2>
-    <p class="menu-title">MAIN MENU</p>
+    <h2> FoodSaver</h2>
+    <p class="subtitle">Food Management System</p>
 
-    <a class="nav active" onclick="showPage('dashboard',this)">
-        <i class="fa-solid fa-chart-pie"></i> Dashboard
-    </a>
-
-    <a class="nav" onclick="showPage('inventory',this)">
-        <i class="fa-solid fa-box"></i> Food Inventory
-    </a>
-
-    <a class="nav" onclick="showPage('expiration',this)">
-        <i class="fa-solid fa-calendar-days"></i> Expiration Tracker
-    </a>
-
-    <a class="nav" onclick="showPage('notifications',this)">
-        <i class="fa-solid fa-bell"></i> Notifications
-        <span id="nav-count">0</span>
-    </a>
-
-    <div class="admin">
-        <i class="fa-solid fa-circle-user"></i>
-        Administrator
-    </div>
+    <a href="#" class="active" onclick="showPage('dashboard', this)">Dashboard</a>
+    <a href="#" onclick="showPage('inventory', this)">Food Inventory</a>
+    <a href="#" onclick="showPage('expiration', this)">Expiration Tracker</a>
+    <a href="#" onclick="showPage('notifications', this)">Notifications <span id="notifCount"></span></a>
 </div>
 
-<main class="main">
+<div class="main">
 
     <header>
-        <div>
-            <h2 id="page-title">Dashboard</h2>
-            <p>Welcome to FoodSaver Management System</p>
-        </div>
-
-        <div class="header-right">
-            <span id="today"></span>
-            <button onclick="showPage('notifications')" class="bell">
-                <i class="fa-solid fa-bell"></i>
-                <span id="bell-count">0</span>
-            </button>
-        </div>
+        <h2 id="pageTitle">Dashboard</h2>
     </header>
 
     <!-- DASHBOARD -->
-    <section id="dashboard" class="page active">
+    <section id="dashboard" class="page">
 
-        <h3>Dashboard Overview</h3>
-
-        <div class="stats">
-
+        <div class="cards">
             <div class="card">
-                <div class="icon green">
-                    <i class="fa-solid fa-boxes-stacked"></i>
-                </div>
-                <p>Total Food Products</p>
-                <h2 id="total">0</h2>
+                <h3>Total Products</h3>
+                <h1 id="totalProducts">0</h1>
             </div>
 
             <div class="card">
-                <div class="icon yellow">
-                    <i class="fa-solid fa-clock"></i>
-                </div>
-                <p>Expiring Soon</p>
-                <h2 id="expiring">0</h2>
+                <h3>Available Stocks</h3>
+                <h1 id="totalStocks">0</h1>
             </div>
 
-            <div class="card">
-                <div class="icon red">
-                    <i class="fa-solid fa-triangle-exclamation"></i>
-                </div>
-                <p>Expired Products</p>
-                <h2 id="expired">0</h2>
+            <div class="card warning">
+                <h3>Expiring Soon</h3>
+                <h1 id="expiringSoon">0</h1>
             </div>
 
-            <div class="card">
-                <div class="icon blue">
-                    <i class="fa-solid fa-warehouse"></i>
-                </div>
-                <p>Available Food Stocks</p>
-                <h2 id="stocks">0</h2>
+            <div class="card danger">
+                <h3>Expired Products</h3>
+                <h1 id="expiredProducts">0</h1>
             </div>
-
         </div>
 
         <div class="panel">
             <h3>Recent Food Products</h3>
-
-            <div class="table-wrap">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Product Name</th>
-                            <th>Category</th>
-                            <th>Quantity</th>
-                            <th>Expiration Date</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="dashboard-table"></tbody>
-                </table>
-            </div>
+            <div id="recentProducts"></div>
         </div>
+
     </section>
 
-    <!-- INVENTORY -->
-    <section id="inventory" class="page">
-
-        <div class="section-head">
-            <div>
-                <h3>Food Inventory Management</h3>
-                <p>Manage your food products and quantities.</p>
-            </div>
-
-            <button class="primary" onclick="openModal()">
-                <i class="fa-solid fa-plus"></i> Add Product
-            </button>
-        </div>
-
-        <input type="text" id="search"
-            placeholder="Search food products..."
-            oninput="renderInventory()">
+    <!-- FOOD INVENTORY -->
+    <section id="inventory" class="page hidden">
 
         <div class="panel">
-            <div class="table-wrap">
+            <h3>Add Food Product</h3>
+
+            <form id="foodForm">
+
+                <input type="hidden" id="editIndex">
+
+                <label>Food Name</label>
+                <input type="text" id="foodName" placeholder="Enter food name" required>
+
+                <label>Category</label>
+                <select id="category" required>
+                    <option value="">Select Category</option>
+                    <option>Fruits</option>
+                    <option>Dairy</option>
+                    <option>Package Foods</option>
+                    <option>Canned Goods</option>
+                </select>
+
+                <label>Quantity</label>
+                <input type="number" id="quantity" min="1" placeholder="Enter quantity" required>
+
+                <label>Expiration Date</label>
+                <input type="date" id="expirationDate" required>
+
+                <button type="submit" id="saveButton">Add Product</button>
+
+            </form>
+        </div>
+
+        <div class="panel">
+            <h3>Food Inventory List</h3>
+
+            <input type="text" id="searchInput" placeholder="Search food product..." oninput="renderInventory()">
+
+            <div class="table-container">
                 <table>
                     <thead>
                         <tr>
-                            <th>Product Name</th>
+                            <th>Food Name</th>
                             <th>Category</th>
                             <th>Quantity</th>
                             <th>Expiration Date</th>
                             <th>Status</th>
-                            <th>Actions</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody id="inventory-table"></tbody>
+                    <tbody id="inventoryList"></tbody>
                 </table>
             </div>
         </div>
+
     </section>
 
     <!-- EXPIRATION TRACKER -->
-    <section id="expiration" class="page">
-
-        <h3>Expiration Date Tracker</h3>
-        <p>Monitor your products and expiration dates.</p>
+    <section id="expiration" class="page hidden">
 
         <div class="panel">
-            <div class="table-wrap">
+            <h3>Expiration Date Tracker</h3>
+            <p>Monitor your food products and their expiration dates.</p>
+
+            <div class="table-container">
                 <table>
                     <thead>
                         <tr>
-                            <th>Product Name</th>
+                            <th>Food Name</th>
+                            <th>Quantity</th>
                             <th>Expiration Date</th>
                             <th>Days Remaining</th>
                             <th>Status</th>
                         </tr>
                     </thead>
-                    <tbody id="expiration-table"></tbody>
+                    <tbody id="expirationList"></tbody>
                 </table>
             </div>
         </div>
+
     </section>
 
     <!-- NOTIFICATIONS -->
-    <section id="notifications" class="page">
+    <section id="notifications" class="page hidden">
 
-        <h3>Notification System</h3>
-        <p>Expiration alerts and inventory warnings.</p>
+        <div class="panel">
+            <h3>Food Expiration Notifications</h3>
+            <p>Alerts for expired and expiring food products.</p>
 
-        <div id="notification-list"></div>
+            <div id="notificationList"></div>
+        </div>
+    <div id="successMessage" class="success-message">
+    <span>✓</span>
+    <div>
+        <strong>FoodSaver</strong>
+        <p>Food product added successfully!</p>
+    </div>
+</div>
     </section>
 
-</main>
-
-<!-- PRODUCT MODAL -->
-<div class="modal" id="product-modal">
-
-    <div class="modal-content">
-
-        <div class="modal-head">
-            <h3 id="modal-title">Add Food Product</h3>
-            <button class="close" onclick="closeModal()">&times;</button>
-        </div>
-
-        <form id="product-form">
-
-            <input type="hidden" id="edit-id">
-
-            <label>Product Name</label>
-            <input type="text" id="product-name" required>
-
-            <label>Category</label>
-            <select id="category" required>
-                <option value="">Select Category</option>
-                <option>Fruits</option>
-                <option>Vegetables</option>
-                <option>Dairy</option>
-                <option>Meat</option>
-                <option>Bakery</option>
-                <option>Canned Goods</option>
-                <option>Others</option>
-            </select>
-
-            <label>Quantity</label>
-            <input type="number" id="quantity" min="0" required>
-
-            <label>Unit</label>
-            <select id="unit">
-                <option>Pieces</option>
-                <option>Kg</option>
-                <option>Liters</option>
-                <option>Boxes</option>
-                <option>Pack</option>
-            </select>
-
-            <label>Expiration Date</label>
-            <input type="date" id="expiration-date" required>
-
-            <label>Low Stock Threshold</label>
-            <input type="number" id="threshold" min="0" value="5">
-
-            <button type="submit" class="primary save-btn">
-                Save Product
-            </button>
-
-        </form>
-
-    </div>
 </div>
 
 <script src="script.js"></script>
