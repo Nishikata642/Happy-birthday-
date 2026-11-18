@@ -1,269 +1,247 @@
-<html class="gr__localhost"><head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>Happy Birthday</title>
-    <meta charset="utf-8">
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    
-<link rel="stylesheet" href="Happy%20Birthday_files/bootstrap.css"><link rel="stylesheet" href="Happy%20Birthday_files/style.css"></head>
+    <title>FoodSaver System</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
 
-<body data-gr-c-s-loaded="true">
-    <div>
-        <div class="container">
+<div class="sidebar">
+    <h2><i class="fa-solid fa-leaf"></i> FoodSaver</h2>
+    <p class="menu-title">MAIN MENU</p>
+
+    <a class="nav active" onclick="showPage('dashboard',this)">
+        <i class="fa-solid fa-chart-pie"></i> Dashboard
+    </a>
+
+    <a class="nav" onclick="showPage('inventory',this)">
+        <i class="fa-solid fa-box"></i> Food Inventory
+    </a>
+
+    <a class="nav" onclick="showPage('expiration',this)">
+        <i class="fa-solid fa-calendar-days"></i> Expiration Tracker
+    </a>
+
+    <a class="nav" onclick="showPage('notifications',this)">
+        <i class="fa-solid fa-bell"></i> Notifications
+        <span id="nav-count">0</span>
+    </a>
+
+    <div class="admin">
+        <i class="fa-solid fa-circle-user"></i>
+        Administrator
+    </div>
+</div>
+
+<main class="main">
+
+    <header>
+        <div>
+            <h2 id="page-title">Dashboard</h2>
+            <p>Welcome to FoodSaver Management System</p>
+        </div>
+
+        <div class="header-right">
+            <span id="today"></span>
+            <button onclick="showPage('notifications')" class="bell">
+                <i class="fa-solid fa-bell"></i>
+                <span id="bell-count">0</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- DASHBOARD -->
+    <section id="dashboard" class="page active">
+
+        <h3>Dashboard Overview</h3>
+
+        <div class="stats">
+
+            <div class="card">
+                <div class="icon green">
+                    <i class="fa-solid fa-boxes-stacked"></i>
+                </div>
+                <p>Total Food Products</p>
+                <h2 id="total">0</h2>
+            </div>
+
+            <div class="card">
+                <div class="icon yellow">
+                    <i class="fa-solid fa-clock"></i>
+                </div>
+                <p>Expiring Soon</p>
+                <h2 id="expiring">0</h2>
+            </div>
+
+            <div class="card">
+                <div class="icon red">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <p>Expired Products</p>
+                <h2 id="expired">0</h2>
+            </div>
+
+            <div class="card">
+                <div class="icon blue">
+                    <i class="fa-solid fa-warehouse"></i>
+                </div>
+                <p>Available Food Stocks</p>
+                <h2 id="stocks">0</h2>
+            </div>
+
+        </div>
+
+        <div class="panel">
+            <h3>Recent Food Products</h3>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Category</th>
+                            <th>Quantity</th>
+                            <th>Expiration Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dashboard-table"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- INVENTORY -->
+    <section id="inventory" class="page">
+
+        <div class="section-head">
             <div>
-                <div class="row">
-                    <div class="loader" style="display: none;">
-                        <button id="play">Start</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <audio class="song" controls="controls" loop="">
-        <source src="Happy%20Birthday_files/music.mp3">
-        
-        Your browser isn't invited for super fun audio time.
-    </audio>
-
-    <canvas id="confetti" width="438" height="726"></canvas>
-    <div class="container pt-5">
-        <div class="row">
-            <div class="col-12 col-xl-6 mx-auto">
-                <img src="Happy%20Birthday_files/banner.png" alt="">
-            </div>
-            <div class="col-12  text-center">
-                <div id="name" class="area">fdsafgfdsfsfdsgfg</div>
+                <h3>Food Inventory Management</h3>
+                <p>Manage your food products and quantities.</p>
             </div>
 
-            <div class="col-12 text-center">
-                <div class="type-wrap">
-                    <div id="typed-strings" class="typing" style="display: none;">
-                        <h2>Happy Birthday <i id="nae">fdsafgfdsfsfdsgfg</i></h2>
-                        <h2>Have a wonderful day</h2>
-                        <h2>Filled with joy and happiness.</h2>
-                    </div>
-                    <span id="typed" style="white-space:pre;">Happy Birthday <i id="nae">fdsafgfdsfsfdsgf</i></span><span class="typed-cursor">|</span>
-                </div>
-            </div>
-
-            <div class="col-12 col-xl-6 mx-auto">
-                <img src="Happy%20Birthday_files/cake.svg" alt="">
-            </div>
+            <button class="primary" onclick="openModal()">
+                <i class="fa-solid fa-plus"></i> Add Product
+            </button>
         </div>
 
+        <input type="text" id="search"
+            placeholder="Search food products..."
+            oninput="renderInventory()">
+
+        <div class="panel">
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Category</th>
+                            <th>Quantity</th>
+                            <th>Expiration Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventory-table"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- EXPIRATION TRACKER -->
+    <section id="expiration" class="page">
+
+        <h3>Expiration Date Tracker</h3>
+        <p>Monitor your products and expiration dates.</p>
+
+        <div class="panel">
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Expiration Date</th>
+                            <th>Days Remaining</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="expiration-table"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- NOTIFICATIONS -->
+    <section id="notifications" class="page">
+
+        <h3>Notification System</h3>
+        <p>Expiration alerts and inventory warnings.</p>
+
+        <div id="notification-list"></div>
+    </section>
+
+</main>
+
+<!-- PRODUCT MODAL -->
+<div class="modal" id="product-modal">
+
+    <div class="modal-content">
+
+        <div class="modal-head">
+            <h3 id="modal-title">Add Food Product</h3>
+            <button class="close" onclick="closeModal()">&times;</button>
+        </div>
+
+        <form id="product-form">
+
+            <input type="hidden" id="edit-id">
+
+            <label>Product Name</label>
+            <input type="text" id="product-name" required>
+
+            <label>Category</label>
+            <select id="category" required>
+                <option value="">Select Category</option>
+                <option>Fruits</option>
+                <option>Vegetables</option>
+                <option>Dairy</option>
+                <option>Meat</option>
+                <option>Bakery</option>
+                <option>Canned Goods</option>
+                <option>Others</option>
+            </select>
+
+            <label>Quantity</label>
+            <input type="number" id="quantity" min="0" required>
+
+            <label>Unit</label>
+            <select id="unit">
+                <option>Pieces</option>
+                <option>Kg</option>
+                <option>Liters</option>
+                <option>Boxes</option>
+                <option>Pack</option>
+            </select>
+
+            <label>Expiration Date</label>
+            <input type="date" id="expiration-date" required>
+
+            <label>Low Stock Threshold</label>
+            <input type="number" id="threshold" min="0" value="5">
+
+            <button type="submit" class="primary save-btn">
+                Save Product
+            </button>
+
+        </form>
+
     </div>
-    <img src="Happy%20Birthday_files/Balloon-Border.png" class="balloon-border" style="top: -500px;" width="100%">
+</div>
 
-
-<!-- Code injected by live-server -->
-<script type="text/javascript">
-	// <![CDATA[  <-- For SVG support
-	if ('WebSocket' in window) {
-		(function () {
-			function refreshCSS() {
-				var sheets = [].slice.call(document.getElementsByTagName("link"));
-				var head = document.getElementsByTagName("head")[0];
-				for (var i = 0; i < sheets.length; ++i) {
-					var elem = sheets[i];
-					var parent = elem.parentElement || head;
-					parent.removeChild(elem);
-					var rel = elem.rel;
-					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
-						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
-						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
-					}
-					parent.appendChild(elem);
-				}
-			}
-			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
-			var address = protocol + window.location.host + window.location.pathname + '/ws';
-			var socket = new WebSocket(address);
-			socket.onmessage = function (msg) {
-				if (msg.data == 'reload') window.location.reload();
-				else if (msg.data == 'refreshcss') refreshCSS();
-			};
-			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
-				console.log('Live reload enabled.');
-				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
-			}
-		})();
-	}
-	else {
-		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
-	}
-	// ]]>
-</script>
-<script src="Happy%20Birthday_files/snowflakes.js"></script>
-<script src="Happy%20Birthday_files/jquery.js"></script>
-<script src="Happy%20Birthday_files/typed.js"></script>
-<script src="Happy%20Birthday_files/script.js"></script><style type="text/css" data-typed-js-css="true">
-        .typed-cursor{
-          opacity: 1;
-        }
-        .typed-cursor.typed-cursor--blink{
-          animation: typedjsBlink 0.7s infinite;
-          -webkit-animation: typedjsBlink 0.7s infinite;
-                  animation: typedjsBlink 0.7s infinite;
-        }
-        @keyframes typedjsBlink{
-          50% { opacity: 0.0; }
-        }
-        @-webkit-keyframes typedjsBlink{
-          0% { opacity: 1; }
-          50% { opacity: 0.0; }
-          100% { opacity: 1; }
-        }
-      </style>
-<script>
-
-</script>
-	
-student_records = [
-    [
-        {"name": "Raven", "grade": 85},
-        {"name": "Israel", "grade": 90}
-    ],
-    [
-        {"name": "Abel", "grade": 78},
-        {"name": "Justine", "grade": 88},
-        {"name": "James", "grade": 92}
-    ]
-]
-            
-def count_students(records):
-    if not records:
-        return 0
-
-    if isinstance(records[0], list):
-        return count_students(records[0]) + count_students(records[1:])
-    else:
-        return 1 + count_students(records[1:])
-
-
-def calculate_total(records):
-    if not records:
-        return 0
-    if isinstance(records[0], list):
-        return calculate_total(records[0]) + calculate_total(records[1:])
-    else:
-        return records[0]["grade"] + calculate_total(records[1:])
-
-def calculate_average(records):
-    total = calculate_total(records)
-    count = count_students(records)
-    if count == 0:
-        return 0.0
-    return round(total / count, 2)
-
-
-def find_highest(records):
-    if not records:
-        return float('-inf')
-    
-    if isinstance(records[0], list):
-        sub_highest = find_highest(records[0])
-        rest_highest = find_highest(records[1:])
-        return sub_highest if sub_highest > rest_highest else rest_highest
-    else:
-        current_grade = records[0]["grade"]
-        rest_highest = find_highest(records[1:])
-        return current_grade if current_grade > rest_highest else rest_highest
-
-
-def search_student(records, name):
-    if not records:
-        return None
-    
-    if isinstance(records[0], list):
-        result = search_student(records[0], name)
-        if result:
-            return result
-        return search_student(records[1:], name)
-    else:
-        if records[0]["name"].lower() == name.lower():
-            return records[0]
-        return search_student(records[1:], name)
-
-
-
-def display_records(records):
-    if not records:
-        return
-    
-    if isinstance(records[0], list):
-        display_records(records[0])
-    else:
-        print(f"Name: {records[0]['name']} | Grade: {records[0]['grade']}")
-    
-    display_records(records[1:])
-
-
-
-def count_passed(records):
-    if not records:
-        return 0
-    if isinstance(records[0], list):
-        return count_passed(records[0]) + count_passed(records[1:])
-    else:
-        passing = 1 if records[0]["grade"] >= 75 else 0
-        return passing + count_passed(records[1:])
-
-def count_failed(records):
-    if not records:
-        return 0
-    if isinstance(records[0], list):
-        return count_failed(records[0]) + count_failed(records[1:])
-    else:
-        failing = 1 if records[0]["grade"] < 75 else 0
-        return failing + count_failed(records[1:])
-
-
-
-def main():
-    while True:
-        print("\n==================================")
-        print("RECURSIVE STUDENT RECORD SYSTEM")
-        print("==================================")
-        print("1. Display Student Records")
-        print("2. Count Students")
-        print("3. Calculate Total Grades")
-        print("4. Calculate Average Grade")
-        print("5. Find Highest Grade")
-        print("6. Search Student")
-        print("7. Count Passed / Failed Students")
-        print("8. Exit")
-        
-        choice = input("Enter your choice (1-8): ")
-        
-        if choice == '1':
-            print("\n--- Student Records ---")
-            display_records(student_records)
-        elif choice == '2':
-            print(f"\nTotal Students: {count_students(student_records)}")
-        elif choice == '3':
-            print(f"\nTotal Grades: {calculate_total(student_records)}")
-        elif choice == '4':
-            print(f"\nAverage Grade: {calculate_average(student_records)}")
-        elif choice == '5':
-            print(f"\nHighest Grade: {find_highest(student_records)}")
-        elif choice == '6':
-            name_to_search = input("\nEnter student name to search: ")
-            res = search_student(student_records, name_to_search)
-            if res:
-                print("Student Found!")
-                print(f"Name: {res['name']}")
-                print(f"Grade: {res['grade']}")
-            else:
-                print("Student Not Found.")
-        elif choice == '7':
-            print(f"\nNumber of Students Passed: {count_passed(student_records)}")
-            print(f"Number of Students Failed: {count_failed(student_records)}")
-        elif choice == '8':
-            print("\nExiting program. Goodbye!")
-            break
-        else:
-            print("\nInvalid choice. Please enter a number between 1 and 8.")
-main()            
-
-		
-</body><span class="gr__tooltip"><span class="gr__tooltip-content"></span><i class="gr__tooltip-logo"></i><span class="gr__triangle"></span></span></html>
+<script src="script.js"></script>
+</body>
+</html>
